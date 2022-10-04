@@ -1,0 +1,421 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Todo</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@200&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+      integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <!-- <link rel="stylesheet" href="css/style.css" /> -->
+    <style>
+      body {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: "Raleway", sans-serif;
+      }
+
+      .main--title {
+        display: block;
+        text-align: center;
+        font-size: 100px;
+        color: indianred;
+        opacity: 0.5;
+        font-weight: 200;
+      }
+      .main--card {
+        width: 700px;
+        margin: 0 auto;
+        background: white;
+        box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.2);
+        position: relative;
+      }
+      .main--card::after {
+        content: "";
+        position: absolute;
+        top: 5px;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        margin: 0 auto;
+        width: 98%;
+        height: 100%;
+        background-color: white;
+        z-index: -1;
+        box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.2);
+      }
+      .main--card--ip {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        position: relative;
+      }
+      .main--card--ip i {
+        width: 30px;
+        padding-left: 15px;
+        opacity: 0.5;
+        position: absolute;
+        top: 20px;
+        left: 0;
+      }
+      .main--card--ip input {
+        width: 640px;
+        border: none;
+        outline: none;
+        font-size: 24px;
+        padding: 15px 15px 15px 0;
+        margin-left: 45px;
+      }
+      .fa-chevron-right {
+        transition: all 0.5s ease;
+      }
+      .main--card--ip input:focus ~ .fa-chevron-right {
+        transform: rotate(90deg);
+      }
+      .main--card--ip input::placeholder {
+        font-size: 24px;
+        color: #ccc;
+        font-style: italic;
+      }
+      .main--card--bt {
+        display: flex;
+        justify-content: space-between;
+        padding: 15px;
+        color: rgb(146, 143, 143);
+      }
+      .active-btn {
+        box-shadow: inset 0 0 0px 1px rgba(0, 0, 0, 0.2);
+        padding: 5px;
+      }
+      .center span {
+        margin: 5px;
+        cursor: pointer;
+      }
+      .left,
+      .center,
+      .right {
+        flex: 1;
+      }
+      .right {
+        cursor: pointer;
+        text-align: right;
+      }
+      .center span:hover,
+      .right:hover {
+        color: indianred;
+      }
+      .main--card--ct ul {
+        margin: 0;
+        padding: 0;
+      }
+      .main--card--ct ul li {
+        cursor: pointer;
+        padding: 15px 10px;
+        list-style-type: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        position: relative;
+      }
+      .main--card--ct ul li:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+      }
+      .circle {
+        width: 20px;
+        height: 20px;
+        background-color: transparent;
+        border-radius: 50%;
+        border: 1px solid #ccc;
+        transition: all 0.5s linear;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .fa-check {
+        color: chartreuse;
+      }
+      .circle .fa-check {
+        display: none;
+      }
+      .circle.active .fa-check {
+        display: flex;
+      }
+      .circle:hover {
+        border: 1px solid chartreuse;
+      }
+      .txt {
+        transition: all 0.5s ease;
+        flex: 1;
+      }
+      .txt::first-letter {
+        text-transform: uppercase;
+      }
+      .circle.active ~ .txt {
+        text-decoration: line-through;
+        color: #ccc;
+      }
+
+      .option {
+        display: flex;
+      }
+      .btn {
+        margin: 0 5px;
+        display: none;
+        transition: all 0.2s ease;
+        opacity: 0.5;
+      }
+      .btn.editItem:hover {
+        color: green;
+      }
+      .btn.deleItem:hover {
+        color: red;
+      }
+      .list:hover .btn {
+        display: flex;
+        opacity: 1;
+      }
+      .circle.active ~ .option > .linkEdit {
+        display: none;
+      }
+      .formEdit.block {
+        display: none;
+      }
+      .formEdit {
+        border: none;
+        outline: none;
+        width: 80%;
+        height: 100%;
+        position: absolute;
+        left: 45px;
+        margin-top: -15px;
+        padding: 0 5px;
+        font-size: 24px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main--title">todos</div>
+      <div class="main--card">
+        <div class="main--card--ip">
+          <form method="POST" id="submitForm">
+            <input
+              type="text"
+              name="todoInput"
+              placeholder="What needs to be done?"
+              autocomplete="off"
+              id="input"
+              maxlength="47"
+            />
+            <i class="fa-solid fa-chevron-right"></i>
+          </form>
+        </div>
+        <div class="main--card--ct">
+          <ul class="ul-list"></ul>
+        </div>
+        <div class="main--card--bt">
+          <div class="left">+ item</div>
+          <div class="center">
+            <span class="active-btn">All</span>
+            <span class="">Active</span>
+            <span class="">Completed</span>
+          </div>
+          <div class="right">Clear Completed</div>
+        </div>
+      </div>
+    </div>
+    <!-- <script src="javascript/todo.js"></script> -->
+    <script>
+      const input = document.getElementById("input");
+      const formSubmit = document.getElementById("submitForm");
+      const listItem = document.querySelector(".ul-list");
+      const circle = document.querySelectorAll(".circle");
+      const url = "http://localhost:8080/api/todo";
+
+      function start() {
+        getAPi(renderHTML);
+        postItem();
+      }
+      function getAPi(callback) {
+        fetch(url)
+          .then((response) => response.json())
+          .then(callback);
+      }
+      function renderHTML(datas) {
+        input.value = "";
+        input.focus();
+        var i = -1;
+        var htmls = datas.map((data, id) => {
+          i++;
+          return data.status
+            ? `<li class="list">
+              <div class="circle" onclick="handleCheck(${i},event)">
+                <i class="fa-solid fa-check"></i>
+              </div>
+              <div class="txt"
+                  ondblclick="handleDoubleEdit(${i},event)">
+                ${data.title}
+                <input
+                  type="text"
+                  id="formEdit"
+                  class="formEdit block"
+                  placeholder="..."
+                  autocomplete="off"
+                  maxlength="47"
+                />
+              </div>
+              <div class="option">
+                <span class="linkEdit" onclick="handleEdit(${i},event)"
+                  ><div class="btn editItem">
+                    <i class="fa-regular fa-pen-to-square"></i></div
+                ></span>
+                <span class="linkDel" onclick="handledelete(${i})"
+                  ><div class="btn deleItem">
+                    <i class="fa-solid fa-trash-can"></i></div
+                ></span>
+              </div>
+            </li>`
+            : `<li class="list">
+              <div class="circle active" onclick="handleCheck(${i},event)">
+                <i class="fa-solid fa-check"></i>
+              </div>
+              <div class="txt"
+                  ondblclick="handleDoubleEdit(${i},event)">
+                ${data.title}
+                <input
+                  type="text"
+                  id="formEdit"
+                  class="formEdit block"
+                  placeholder="..."
+                  autocomplete="off"
+                  maxlength="47"
+                />
+              </div>
+              <div class="option active">
+                <span class="linkEdit" onclick="handleEdit(${i},event)"
+                  ><div class="btn editItem">
+                    <i class="fa-regular fa-pen-to-square"></i></div
+                ></span>
+                <span class="linkDel" onclick="handledelete(${i})"
+                  ><div class="btn deleItem">
+                    <i class="fa-solid fa-trash-can"></i></div
+                ></span>
+              </div>
+            </li>`;
+        });
+        listItem.innerHTML = htmls.join("");
+      }
+
+      function postItem() {
+        if (formSubmit.getAttribute("onsubmit") == "true") {
+          const exr = input.value;
+          const options = {
+            method: "POST",
+            body: JSON.stringify({ title: exr, status: true }),
+          };
+          fetch(url, options)
+            .then((response) => response.json())
+            .catch((error) => error.json());
+          getAPi(renderHTML);
+        } else {
+          return;
+        }
+      }
+      function handleEdit(id, event) {
+        event.target
+          .closest(".list")
+          .querySelector(".formEdit")
+          .classList.toggle("block");
+        const context = event.target
+          .closest(".list")
+          .querySelector(".formEdit");
+        context.addEventListener("keypress", (even) => {
+          if (even.key == "Enter") {
+            if (context.value == "") {
+              return;
+            } else {
+              const options = {
+                method: "PUT",
+                body: JSON.stringify({ title: context.value, status: true }),
+              };
+              fetch(url + "/" + id, options)
+                .then((response) => response.json())
+                .catch((error) => error.json());
+              event.target
+                .closest(".list")
+                .querySelector(".formEdit")
+                .classList.toggle("block");
+              getAPi(renderHTML);
+              location.reload();
+            }
+            return;
+          }
+        });
+      }
+      function handledelete(id) {
+        const options = {
+          method: "DELETE",
+        };
+        fetch(url + "/" + id, options)
+          .then((response) => response.json())
+          .catch((error) => error.json());
+        getAPi(renderHTML);
+        location.reload();
+      }
+
+      start();
+
+      formSubmit.addEventListener("submit", function (e) {
+        e.preventDefault();
+      });
+
+      function handleCheck(id, event) {
+        const context = event.target.closest(".list").querySelector(".txt");
+        var bool;
+        event.target.closest(".circle").classList.toggle("active")
+          ? (bool = false)
+          : (bool = true);
+        const options = {
+          method: "PUT",
+          body: JSON.stringify({
+            title: context.innerText,
+            status: bool,
+          }),
+        };
+        fetch(url + "/" + id, options)
+          .then((response) => response.json())
+          .catch((error) => error.json());
+      }
+      function handleDoubleEdit(id) {
+        handleEdit(id, event);
+      }
+      input.addEventListener("keypress", (even) => {
+        if (even.key == "Enter") {
+          if (input.value == "") {
+            formSubmit.setAttribute("onsubmit", false);
+            start();
+          } else {
+            formSubmit.setAttribute("onsubmit", true);
+            start();
+          }
+          return;
+        }
+      });
+    </script>
+  </body>
+</html>
